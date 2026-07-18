@@ -17,34 +17,34 @@ app.get("/", (req, res) => {
 // Get all roasts
 app.get("/roasts", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM roasts");
+    const result = await pool.query("SELECT * FROM roasts ORDER BY id DESC");
     res.json(result.rows);
   } catch (error) {
-    console.error("GET /roasts Error:", error.message);
-    res.status(500).send("Server Error");
+    console.error("GET /roasts Error:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Add a new roast
+// Add Roast
 app.post("/roasts", async (req, res) => {
   try {
     const { friend_name, category, roast } = req.body;
 
     const result = await pool.query(
       `INSERT INTO roasts (friend_name, category, roast)
-       VALUES ($1, $2, $3)
+       VALUES ($1,$2,$3)
        RETURNING *`,
       [friend_name, category, roast]
     );
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error("POST /roasts Error:", error.message);
-    res.status(500).send("Server Error");
+    console.error("POST Error:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Update a roast
+// Update Roast
 app.put("/roasts/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -52,52 +52,39 @@ app.put("/roasts/:id", async (req, res) => {
 
     const result = await pool.query(
       `UPDATE roasts
-       SET friend_name = $1,
-           category = $2,
-           roast = $3
-       WHERE id = $4
+       SET friend_name=$1,
+           category=$2,
+           roast=$3
+       WHERE id=$4
        RETURNING *`,
       [friend_name, category, roast, id]
     );
 
     res.json(result.rows[0]);
   } catch (error) {
-    console.error("PUT /roasts Error:", error.message);
-    res.status(500).send("Server Error");
+    console.error("PUT Error:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Delete a roast
+// Delete Roast
 app.delete("/roasts/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    await pool.query("DELETE FROM roasts WHERE id = $1", [id]);
+    await pool.query(
+      "DELETE FROM roasts WHERE id=$1",
+      [id]
+    );
 
-    res.json({ message: "Roast deleted successfully!" });
+    res.json({ message: "Deleted successfully" });
   } catch (error) {
-    console.error("DELETE /roasts Error:", error.message);
-    res.status(500).send("Server Error");
+    console.error("DELETE Error:", error);
+    res.status(500).json({ error: error.message });
   }
 });
 
-// Database Connection Test
-pool.query(
-  `
-  SELECT table_name
-  FROM information_schema.tables
-  WHERE table_schema = 'public';
-  `,
-  (err, result) => {
-    if (err) {
-      console.error(err);
-    } else {
-      console.log("Tables in public schema:");
-      console.table(result.rows);
-    }
-  }
-);
 // Start Server
-app.listen(PORT, () => {
-  console.log(`🚀 Server is running on http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port ${PORT}`);
 });
