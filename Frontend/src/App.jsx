@@ -77,12 +77,14 @@ function App() {
   }
 };
 
-  const editRoast = (item) => {
-    setFriendName(item.friend_name);
-    setCategory(item.category);
-    setRoast(item.roast);
-    setEditId(item.id);
-  };
+ const editRoast = (item) => {
+  console.log("Edit clicked:", item);
+
+  setFriendName(item.friend_name);
+  setCategory(item.category);
+  setRoast(item.roast);
+  setEditId(item.id);
+};
 
   return (
     <div className="container">
@@ -148,16 +150,18 @@ function App() {
 
               <div className="action-tray">
                 {/* Hammer/Edit Button */}
-                <button 
-                  className="btn-action btn-hammer" 
-                  onClick={() => editRoast(item)}
-                  title="Fix this roast"
-                >
-                  <span className="hammer-emoji">🔨</span> Fix It
-                </button>
+               <button
+  type="button"
+  className="btn-action btn-hammer"
+  onClick={() => editRoast(item)}
+  title="Fix this roast"
+>
+  <span className="hammer-emoji">🔨</span> Fix It
+</button>
 
                 {/* Pacman/Delete Button */}
                 <button
+  type="button"
   className="btn-action btn-pacman"
   onClick={() => deleteRoast(item.id)}
   title="Delete this roast"
