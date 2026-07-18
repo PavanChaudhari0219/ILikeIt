@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function App() {
   const [roasts, setRoasts] = useState([]);
   const [friendName, setFriendName] = useState("");
@@ -14,7 +16,7 @@ function App() {
 
   const fetchRoasts = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:5000/roasts");
+      const response = await fetch(`${API_URL}/roasts`);
       const data = await response.json();
       setRoasts(data);
     } catch (error) {
@@ -32,8 +34,8 @@ function App() {
 
     try {
       const url = editId
-        ? `http://127.0.0.1:5000/roasts/${editId}`
-        : "http://127.0.0.1:5000/roasts";
+        ? `${API_URL}/roasts/${editId}`
+        : `${API_URL}/roasts`;
 
       const method = editId ? "PUT" : "POST";
 
@@ -53,6 +55,7 @@ function App() {
       setCategory("");
       setRoast("");
       setEditId(null);
+
       fetchRoasts();
     } catch (error) {
       console.error("💀 Error saving roast:", error);
@@ -60,44 +63,44 @@ function App() {
   };
 
   const deleteRoast = async (id) => {
-  const confirmDelete = window.confirm(
-    "⚠️ Are you sure you want to delete this roast?\n\nThis action cannot be undone."
-  );
+    const confirmDelete = window.confirm(
+      "⚠️ Are you sure you want to delete this roast?\n\nThis action cannot be undone."
+    );
 
-  if (!confirmDelete) return;
+    if (!confirmDelete) return;
 
-  try {
-    await fetch(`http://127.0.0.1:5000/roasts/${id}`, {
-      method: "DELETE",
-    });
+    try {
+      await fetch(`${API_URL}/roasts/${id}`, {
+        method: "DELETE",
+      });
 
-    fetchRoasts();
-  } catch (error) {
-    console.error("💀 Error deleting roast:", error);
-  }
-};
+      fetchRoasts();
+    } catch (error) {
+      console.error("💀 Error deleting roast:", error);
+    }
+  };
 
- const editRoast = (item) => {
-  console.log("Edit clicked:", item);
+  const editRoast = (item) => {
+    console.log("Edit clicked:", item);
 
-  setFriendName(item.friend_name);
-  setCategory(item.category);
-  setRoast(item.roast);
-  setEditId(item.id);
-};
+    setFriendName(item.friend_name);
+    setCategory(item.category);
+    setRoast(item.roast);
+    setEditId(item.id);
+  };
 
   return (
     <div className="container">
       <header className="hero-section">
-  <h1 className="title">
-    
-    <span className="gradient-text">ILikeIt</span>
-  </h1>
-  <p className="subtitle">The Ultimate Roast Vault. No Cap. 🧢</p>
-</header>
+        <h1 className="title">
+          <span className="gradient-text">ILikeIt</span>
+        </h1>
+        <p className="subtitle">The Ultimate Roast Vault. No Cap. 🧢</p>
+      </header>
 
       <div className="card form-card">
         <h2>{editId ? "⚡ Cooking up an Update..." : "✍️ Drop a New Roast"}</h2>
+
         <form onSubmit={addRoast}>
           <div className="input-group">
             <input
@@ -143,33 +146,31 @@ function App() {
                 <h3>@{item.friend_name}</h3>
                 <span className="badge">{item.category}</span>
               </div>
-              
+
               <div className="roast-body">
                 <p>"{item.roast}"</p>
               </div>
 
               <div className="action-tray">
-                {/* Hammer/Edit Button */}
-               <button
-  type="button"
-  className="btn-action btn-hammer"
-  onClick={() => editRoast(item)}
-  title="Fix this roast"
->
-  <span className="hammer-emoji">🔨</span> Fix It
-</button>
-
-                {/* Pacman/Delete Button */}
                 <button
-  type="button"
-  className="btn-action btn-pacman"
-  onClick={() => deleteRoast(item.id)}
-  title="Delete this roast"
->
-  <span className="pacman-track">
-    Consume
-  </span>
-</button>
+                  type="button"
+                  className="btn-action btn-hammer"
+                  onClick={() => editRoast(item)}
+                  title="Fix this roast"
+                >
+                  <span className="hammer-emoji">🔨</span> Fix It
+                </button>
+
+                <button
+                  type="button"
+                  className="btn-action btn-pacman"
+                  onClick={() => deleteRoast(item.id)}
+                  title="Delete this roast"
+                >
+                  <span className="pacman-track">
+                    Consume
+                  </span>
+                </button>
               </div>
             </div>
           ))
