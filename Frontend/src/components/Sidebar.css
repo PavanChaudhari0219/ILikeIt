@@ -1,0 +1,106 @@
+/* ===== Sidebar ===== */
+
+.sidebar {
+  width: 250px;
+  min-height: 100vh;
+  background: #1f1830;
+  border-right: 2px solid #3a2d55;
+  padding: 25px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== Logo ===== */
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.logo-icon {
+  width: 50px;
+  height: 50px;
+  background: #ff5c6c;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+}
+
+.logo-title {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.logo-title span {
+  color: #d7ff4e;
+}
+
+.logo-subtitle {
+  color: #ff5c6c;
+  font-size: 13px;
+  margin-top: 3px;
+}
+
+/* ===== Navigation ===== */
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav-item {
+  background: transparent;
+  border: none;
+  color: #d8d2ea;
+  padding: 14px 16px;
+  border-radius: 12px;
+  font-size: 15px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+.nav-item:hover {
+  background: #2d2345;
+  color: white;
+}
+
+.nav-item.active {
+  background: #ff5c6c;
+  color: #111;
+  font-weight: bold;
+}
+
+/* ===== Footer ===== */
+
+.sidebar-footer {
+  margin-top: auto;
+  background: #2a2140;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+}
+
+.footer-emoji {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.sidebar-footer h3 {
+  color: #d7ff4e;
+  margin-bottom: 10px;
+}
+
+.sidebar-footer p {
+  color: #c8c0df;
+  font-size: 14px;
+  line-height: 1.5;
+}
