@@ -35,10 +35,11 @@ body{
   font-weight:800;
 }
 
-.gradient-text{
-  background:linear-gradient(90deg,#7c3aed,#ec4899);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
+.gradient-text {
+    background: linear-gradient(90deg, #7c3aed, #ec4899);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .subtitle{
