@@ -108,7 +108,44 @@ app.patch("/roasts/:id/dislike", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+// 💬 Get Comments for a Roast
+app.get("/roasts/:id/comments", async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    const result = await pool.query(
+      `SELECT * FROM comments
+       WHERE roast_id = $1
+       ORDER BY created_at ASC`,
+      [id]
+    );
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("GET COMMENTS Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 💬 Add Comment
+app.post("/roasts/:id/comments", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { username, comment } = req.body;
+
+    const result = await pool.query(
+      `INSERT INTO comments (roast_id, username, comment)
+       VALUES ($1, $2, $3)
+       RETURNING *`,
+      [id, username, comment]
+    );
+
+    res.status(201).json(result.rows[0]);
+  } catch (error) {
+    console.error("POST COMMENT Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
 // Delete Roast
 app.delete("/roasts/:id", async (req, res) => {
   try {
