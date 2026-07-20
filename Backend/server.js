@@ -17,7 +17,9 @@ app.get("/", (req, res) => {
 // Get all roasts
 app.get("/roasts", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM roasts ORDER BY id DESC");
+    const result = await pool.query(
+      "SELECT * FROM roasts ORDER BY id DESC"
+    );
     res.json(result.rows);
   } catch (error) {
     console.error("GET /roasts Error:", error);
@@ -32,7 +34,7 @@ app.post("/roasts", async (req, res) => {
 
     const result = await pool.query(
       `INSERT INTO roasts (friend_name, category, roast)
-       VALUES ($1,$2,$3)
+       VALUES ($1, $2, $3)
        RETURNING *`,
       [friend_name, category, roast]
     );
@@ -52,10 +54,10 @@ app.put("/roasts/:id", async (req, res) => {
 
     const result = await pool.query(
       `UPDATE roasts
-       SET friend_name=$1,
-           category=$2,
-           roast=$3
-       WHERE id=$4
+       SET friend_name = $1,
+           category = $2,
+           roast = $3
+       WHERE id = $4
        RETURNING *`,
       [friend_name, category, roast, id]
     );
@@ -67,13 +69,53 @@ app.put("/roasts/:id", async (req, res) => {
   }
 });
 
+// 👍 Like Roast
+app.patch("/roasts/:id/like", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      `UPDATE roasts
+       SET likes = likes + 1
+       WHERE id = $1
+       RETURNING *`,
+      [id]
+    );
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error("LIKE Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 👎 Dislike Roast
+app.patch("/roasts/:id/dislike", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      `UPDATE roasts
+       SET dislikes = dislikes + 1
+       WHERE id = $1
+       RETURNING *`,
+      [id]
+    );
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error("DISLIKE Error:", error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Delete Roast
 app.delete("/roasts/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
     await pool.query(
-      "DELETE FROM roasts WHERE id=$1",
+      "DELETE FROM roasts WHERE id = $1",
       [id]
     );
 
